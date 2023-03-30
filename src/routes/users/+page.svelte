@@ -1,39 +1,80 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	export let data: any;
+	import moment from 'moment';
+	let users = data.props.data;
 
-	let hotels = data.props.hotels;
-	let users = data.props.users;
+	const account_created = moment().format('YYYY-MM-DD HH:mm:ss');
 
+	const user = {
+		email: 'tobnias@test.de',
+		name: 'Tobias',
+		last_name: 'Klein',
+		phone_number: 345345345,
+		location: 'Berlin',
+		age: 10,
+		alias_name: 'Tobi',
+		account_created,
+		last_login: account_created,
+		online: 0,
+		avatar_url: 'https://ionicframework.com/docs/img/demos/avatar.svg'
+	};
 
+	const saveNewUser = async (user: any) => {
+		const response = await fetch(`http://localhost:5173/api/users`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(user)
+		});
+
+		const data = await response.json();
+		return data;
+	};
+
+	const handleSubmit = async (e: any) => {
+		e.preventDefault();
+		const formData = {
+			...user,
+		};
+
+		const data = await saveNewUser(formData);
+
+		if (data.error) {
+			// console.log(data.error);
+			return;
+		} else {
+			users = [...users, user];
+		}
+	};
 </script>
 
-<form class="grid gap-3 p-12 max-w-2xl mx-auto" method="POST">
-  <label for="email">Email</label>
-  <input type="email" id="email" name="email" required />
+<form class="mx-auto flex items-center justify-center" on:submit={handleSubmit}>
+	<!-- <label for="email">Email</label>
+	<input type="email" id="email" bind:value={email} />
 
-  <label for="name">Name</label>
-  <input type="text" id="name" name="name" required />
+	<label for="name">Name</label>
+	<input type="text" id="name" bind:value={name} />
 
-  <label for="lastName">Last Name</label>
-  <input type="text" id="lastName" name="lastName" required />
+	<label for="lastName">Last Name</label>
+	<input type="text" id="lastName" bind:value={lastName} />
 
-  <label for="phoneNumber">Phone Number</label>
-  <input type="tel" id="phoneNumber" name="phoneNumber" required />
+	<label for="phoneNumber">Phone Number</label>
+	<input type="tel" id="phoneNumber" bind:value={phoneNumber} />
 
-  <label for="location">Location</label>
-  <input type="text" id="location" name="location" required />
+	<label for="location">Location</label>
+	<input type="text" id="location" bind:value={location} />
 
-  <label for="age">Age</label>
-  <input type="number" id="age" name="age" required />
+	<label for="age">Age</label>
+	<input type="number" id="age" bind:value={age} />
 
-  <label for="aliasName">Alias Name</label>
-  <input type="text" id="aliasName" name="aliasName" required />
+	<label for="aliasName">Alias Name</label>
+	<input type="text" id="aliasName" bind:value={aliasName} />
 
-  <label for="avatarUrl">Avatar URL</label>
-  <input type="url" id="avatarUrl" name="avatarUrl" required />
+	<label for="avatarUrl">Avatar URL</label>
+	<input type="url" id="avatarUrl" bind:value={avatarUrl} /> -->
 
-  <button class="p-4 bg-black text-white" type="submit">Submit</button>
+	<button class="bg-black p-4 rounded-2xl text-white" type="submit">Submit</button>
 </form>
 
 <ul class="grid grid-cols-1 gap-6 p-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
