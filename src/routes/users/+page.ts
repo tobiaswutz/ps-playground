@@ -2,7 +2,7 @@ import type { PageLoad } from './$types';
 
 export const load = (async ({ params }) => {
 	try {
-		const response = await fetch(`http://localhost:5173/api/users`);
+		const response = await fetch(`https://ps-playground.vercel.app/api/users`);
 		const data = await response.json();
 
 		return {
