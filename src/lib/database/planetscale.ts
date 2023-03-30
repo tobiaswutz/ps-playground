@@ -9,6 +9,6 @@ const config = {
 };
 
 export async function getPlanetScaleConnection() {
-  const conn = await connect(config);
+  const conn = connect(config);
   return conn;
 }

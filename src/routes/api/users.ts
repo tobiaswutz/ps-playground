@@ -1,22 +1,22 @@
 import { getPlanetScaleConnection } from '$lib/database/planetscale';
 
-export async function getAllHotels() {
+export async function getAllUsers() {
   try {
     const conn = await getPlanetScaleConnection();
-    const results = await conn.execute('SELECT * FROM hotels');
+    const results = await conn.execute('SELECT * FROM user');
 
     return {
       status: 200,
       body: {
-        hotels: results.rows
+        users: results.rows
       }
     };
   } catch (error) {
-    console.error('Error fetching hotels:', error);
+    console.error('Error fetching users:', error);
     return {
       status: 500,
       body: {
-        error: 'Failed to fetch hotels'
+        error: 'Failed to fetch users'
       }
     };
   }
