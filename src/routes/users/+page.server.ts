@@ -1,9 +1,8 @@
-import type { PageLoad } from './$types';
-import { VITE_BASE_URL } from '$env/static/private';
+import { BASE_URL } from '$env/static/private';
 
 export const load = (async ({ params }) => {
 	try {
-		const response = await fetch(VITE_BASE_URL + 'api/users');
+		const response = await fetch(BASE_URL + 'api/users');
 		const data = await response.json();
 
 		return {
@@ -19,4 +18,4 @@ export const load = (async ({ params }) => {
 			}
 		};
 	}
-}) satisfies PageLoad;
+})
