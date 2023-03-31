@@ -1,23 +1,11 @@
 <script lang="ts">
-	export let data: any;
+	import { User } from '$lib/models/User';
 	import moment from 'moment';
+	export let data: any;
+
 	let users = data.props.data;
 
-	const account_created = moment().format('YYYY-MM-DD HH:mm:ss');
-
-	const user = {
-		email: 'tobnias@test.de',
-		name: 'Tobias',
-		last_name: 'Klein',
-		phone_number: 345345345,
-		location: 'Berlin',
-		age: 10,
-		alias_name: 'Tobi',
-		account_created,
-		last_login: account_created,
-		online: 0,
-		avatar_url: 'https://ionicframework.com/docs/img/demos/avatar.svg'
-	};
+	const user = new User('tobias@test.de', 'Tobias', 'Wutz', '54345345', 'Bayuern', 24, '@boehmer', false, 'http://www.playtoearn.online/wp-content/uploads/2021/10/Clone-X-NFT-avatar.png');
 
 	const saveNewUser = async (user: any) => {
 		const response = await fetch(`http://localhost:5173/api/users`, {
@@ -35,7 +23,7 @@
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 		const formData = {
-			...user,
+			...user
 		};
 
 		const data = await saveNewUser(formData);
@@ -49,37 +37,16 @@
 	};
 </script>
 
+
 <form class="mx-auto flex items-center justify-center" on:submit={handleSubmit}>
-	<!-- <label for="email">Email</label>
-	<input type="email" id="email" bind:value={email} />
 
-	<label for="name">Name</label>
-	<input type="text" id="name" bind:value={name} />
 
-	<label for="lastName">Last Name</label>
-	<input type="text" id="lastName" bind:value={lastName} />
-
-	<label for="phoneNumber">Phone Number</label>
-	<input type="tel" id="phoneNumber" bind:value={phoneNumber} />
-
-	<label for="location">Location</label>
-	<input type="text" id="location" bind:value={location} />
-
-	<label for="age">Age</label>
-	<input type="number" id="age" bind:value={age} />
-
-	<label for="aliasName">Alias Name</label>
-	<input type="text" id="aliasName" bind:value={aliasName} />
-
-	<label for="avatarUrl">Avatar URL</label>
-	<input type="url" id="avatarUrl" bind:value={avatarUrl} /> -->
-
-	<button class="bg-black p-4 rounded-2xl text-white" type="submit">Submit</button>
+	<button class="rounded-2xl bg-black p-4 text-white" type="submit">Submit</button>
 </form>
 
-<ul class="grid grid-cols-1 gap-6 p-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+<ul class="grid grid-cols-1 gap-6 px-24 py-12 sm:grid-cols-2 lg:grid-cols-3">
 	{#each users as user}
-		<li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
+		<li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-black/20 dark:bg-white/20 backdrop-blur-lg text-center shadow">
 			<div class="flex flex-1 flex-col p-8">
 				<img class="mx-auto h-32 w-32 flex-shrink-0 rounded-full" src={user.avatar_url} alt={user.name} />
 				<h3 class="mt-6 text-sm font-medium text-gray-900">{user.name} {user.last_name}</h3>
