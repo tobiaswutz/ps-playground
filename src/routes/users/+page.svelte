@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { User } from '$lib/models/User';
+	import apiService from '$lib/services/apiService';
 	import moment from 'moment';
 	export let data: any;
+	import toast from 'svelte-french-toast';
 
 	let users = data.props.data;
 
@@ -35,6 +37,26 @@
 			users = [...users, user];
 		}
 	};
+
+
+
+const testApi = async () => {
+  toast.promise(
+    apiService.get<any>('api/users'),
+    {
+      loading: 'Fetching user test...',
+      success: (response) => {
+        console.log(response);
+        return 'Fetch User Test successful!';
+      },
+      error: (error) => {
+        console.error('Error fetching user test:', error);
+        return 'Could not fetch user test.';
+      },
+    }
+  );
+};
+
 </script>
 
 
@@ -43,6 +65,10 @@
 
 	<button class="rounded-2xl bg-black p-4 text-white" type="submit">Submit</button>
 </form>
+
+<div class="w-full pt-12 flex items-center justify-center">
+	<button class="bg-blue-600 w-72 p-2 rounded-md" on:click={testApi}>FETCH USER TEST</button>
+</div>
 
 <ul class="grid grid-cols-1 gap-6 px-24 py-12 sm:grid-cols-2 lg:grid-cols-3">
 	{#each users as user}

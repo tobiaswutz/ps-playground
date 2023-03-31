@@ -33,6 +33,7 @@
 	"dependencies": {
 		"@planetscale/database": "^1.6.0",
 		"dotenv": "^16.0.3",
-		"moment": "^2.29.4"
+		"moment": "^2.29.4",
+		"svelte-french-toast": "1.0.4-beta.0"
 	}
 }
