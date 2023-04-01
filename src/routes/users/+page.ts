@@ -1,8 +1,8 @@
-import { BASE_URL } from '$env/static/private';
+import { PUBLIC_BASE_URL } from '$env/static/public';
 
 export const load = (async ({ params }) => {
 	try {
-		const response = await fetch(BASE_URL + 'api/users');
+		const response = await fetch(PUBLIC_BASE_URL + 'api/users');
 		const data = await response.json();
 
 		return {
@@ -11,7 +11,6 @@ export const load = (async ({ params }) => {
 			}
 		};
 	} catch (error) {
-		// console.error(error);
 		return {
 			props: {
 				data: null

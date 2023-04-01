@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { User } from '$lib/models/User';
 	import apiService from '$lib/services/apiService';
-	import moment from 'moment';
 	export let data: any;
 	import toast from 'svelte-french-toast';
 
@@ -9,70 +8,46 @@
 
 	const user = new User('tobias@test.de', 'Tobias', 'Wutz', '54345345', 'Bayuern', 24, '@boehmer', false, 'http://www.playtoearn.online/wp-content/uploads/2021/10/Clone-X-NFT-avatar.png');
 
-	const saveNewUser = async (user: any) => {
-		const response = await fetch(`http://localhost:5173/api/users`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(user)
-		});
-
-		const data = await response.json();
-		return data;
-	};
-
-	const handleSubmit = async (e: any) => {
-		e.preventDefault();
-		const formData = {
-			...user
-		};
-
-		const data = await saveNewUser(formData);
-
-		if (data.error) {
-			// console.log(data.error);
-			return;
-		} else {
-			users = [...users, user];
-		}
-	};
-
-
-
-const testApi = async () => {
-  toast.promise(
-    apiService.get<any>('api/users'),
-    {
-      loading: 'Fetching user test...',
-      success: (response) => {
-        console.log(response);
-        return 'Fetch User Test successful!';
-      },
-      error: (error) => {
-        console.error('Error fetching user test:', error);
-        return 'Could not fetch user test.';
-      },
-    }
-  );
+	const saveNewUser = async () => {
+  try {
+		console.log(user);
+    const response = await apiService.post<any>('api/users', user);
+    console.log(response);
+    toast.success('User saved successfully!');
+  } catch (error) {
+    console.error(error);
+    toast.error('Could not save user.');
+  }
 };
 
+
+
+	const testApi = async () => {
+		toast.promise(apiService.get<any>('api/users'), {
+			loading: 'Fetching user test...',
+			success: (response) => {
+				console.log(response);
+				return 'Fetch User Test successful!';
+			},
+			error: (error) => {
+				console.error('Error fetching user test:', error);
+				return 'Could not fetch user test.';
+			}
+		});
+	};
 </script>
 
-
-<form class="mx-auto flex items-center justify-center" on:submit={handleSubmit}>
-
-
+<form class="mx-auto flex items-center justify-center" on:submit|preventDefault={saveNewUser}>
 	<button class="rounded-2xl bg-black p-4 text-white" type="submit">Submit</button>
 </form>
 
-<div class="w-full pt-12 flex items-center justify-center">
-	<button class="bg-blue-600 w-72 p-2 rounded-md" on:click={testApi}>FETCH USER TEST</button>
+<div class="flex w-full items-center justify-center pt-12">
+	<button class="w-72 rounded-md bg-blue-600 p-2" on:click={testApi}>FETCH USER TEST</button>
 </div>
 
 <ul class="grid grid-cols-1 gap-6 px-24 py-12 sm:grid-cols-2 lg:grid-cols-3">
 	{#each users as user}
-		<li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-black/20 dark:bg-white/20 backdrop-blur-lg text-center shadow">
+		<li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-black/20 text-center shadow backdrop-blur-lg dark:bg-white/20">
 			<div class="flex flex-1 flex-col p-8">
 				<img class="mx-auto h-32 w-32 flex-shrink-0 rounded-full" src={user.avatar_url} alt={user.name} />
 				<h3 class="mt-6 text-sm font-medium text-gray-900">{user.name} {user.last_name}</h3>
